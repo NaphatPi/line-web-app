@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id='liffId' style="display: none;">{{liffId}}</div>
+<div class="text-center align-middle" style="margin-top: 30px; padding-bottom: 20px;">
+    <h4>ส่งคำขอลงทะเบียนเรียบร้อยแล้ว!</h4>
+</div>
+<div class="content-section">
+    <img src="{{ url_for('static', filename='image/thank_isuzu_boy.jpg') }}" class="img-fluid" alt="Responsive image">
+</div>
+<div class="text-center align-middle" style="padding-top: 20px;">
+    <h5>โปรดรอการตอบกลับจากเจ้าหน้าที่</h5>
+    <h5>เพื่อยืนยันการลงทะเบียนอีกครั้ง</h5>
+</div>
+<div class="text-center" style="padding-top: 15px;">
+    <button type="button" id='btn-cls' class="btn btn-secondary btn-lg">ปิดหน้าต่าง</button>
+</div>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+    document.getElementById('btn-cls').addEventListener('click', () => {
+        liff.closeWindow();
+    })
+
+    let liffId = document.getElementById('liffId').innerText;
+
+    async function main() {
+        try {
+            await liff.init({ liffId: liffId })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    
+    main()
+</script>
+{% endblock content %}

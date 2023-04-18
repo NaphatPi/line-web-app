@@ -1,0 +1,155 @@
+{% extends "table_template.html" %}
+{% block content %}
+<header class='content-header'>
+  <h1>Documents</h1>
+
+  <button type="button" class="btn btn-outline-primary float-end mt-1" id="create-doc-btn" data-toggle="modal" data-target="#exampleModalCenter" style="margin-bottom: 10px;">Create new document</button>
+  
+</header>
+<table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col" class="col col-lg-5">Title</th>
+        <th scope="col">Tag</th>
+        <th scope="col">Upload by</th>
+        <th scope="col">Upload date</th>
+        <th scope="col">Link</th>
+        <th scope="col" style="text-align: center;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for idx, document in documents %}
+        <tr>
+            <td class="align-middle">{{ idx }}</td>
+            <td class="align-middle">{{ document.title }}</td>
+            <td class="align-middle">{{ document.tag }}</td>
+            <td class="align-middle">{{ document.uploadBy }}</td>
+            <td class="align-middle">{{ document.uploadDate.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+            <td class="align-middle">
+                <button type="button" class="btn btn-light-dark" data-toggle="tooltip" data-placement="top" title="Copy link to clipboard" style="border:none; background:none;">
+                    <i class="far fa-copy" value="{{ document.link }}" ></i>
+                </button>
+            </td>
+          <td class="align-middle" style="text-align: center;">
+            <a href="{{ url_for('preview', hex=document.hex)}}">Preview</a>
+            <a class="delete-btn" href="{{ url_for('documents', hex=document.hex, action='delete' ) }}">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Create new document</h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="content-section" id="main">
+                <form action="" id="create-doc-form" method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <div class="mb-3">
+                            {{ form.title.label(class="form-label") }}
+                            
+                            {% if form.title.errors %}
+                                {{ form.title(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.title.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class="form-control form-control-lg", autocomplete="off") }}
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                {{ form.description.label(class="form-label") }}
+                                
+                                {% if form.description.errors %}
+                                    {{ form.description(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.description.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.description(class="form-control form-control-lg", autocomplete="off") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                                {{ form.tag.label(class="form-label") }}
+                                
+                                {% if form.tag.errors %}
+                                    {{ form.tag(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.tag.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.tag(class="form-control form-control-lg", autocomplete="off") }}
+                                {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.docFile.label(class="form-label") }}
+                            <div class="form-group">
+                                {{ form.docFile(class="form-control" ) }}
+                                {% if form.docFile.errors %}
+                                    {% for error in form.docFile.errors %}
+                                        <span class="text-danger">{{ error }}</span></br>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button type="button" id="close-doc-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        {{ form.btnSubmit(class="btn btn-primary") }}
+                        <button class="btn btn-primary" type="button" id="btn-loading" disabled style="display: none;">
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                          Creating
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="temp"></div>
+
+
+    <!-- Confirm delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm delete</h5>
+          <button type="button" class="modal" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="delete-modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-del" data-dismiss="modal">Cancel</button>
+          <a type="button" id="delete-modal-btn" href="" class="btn btn-danger">Delete</a>
+          <button class="btn btn-danger" type="button" id="btn-del-loading" disabled style="display: none;">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Deleting
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='documents.js') }}"></script>
+{% endblock %}

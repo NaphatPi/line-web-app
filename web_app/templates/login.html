@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="position-absolute top-50 start-50 translate-middle" id="spinner">
+        <div class="spinner-grow text-secondary" style="width: 3rem; height: 3rem;" role="status"></div>
+</div>
+<div id='liffId' style="display: none;">{{liffId}}</div>
+<form action="" method="post" id="login" style="display: none;">
+        {{ form.hidden_tag() }}
+        {{ form.userIDToken() }}
+        {{ form.getOS() }}
+        {{ form.isInClient() }}
+        {{ form.getFriendShip() }}
+        {{ form.btnSubmit() }}
+</form>
+<script src="{{ url_for('static', filename='login.js') }}"></script>
+{% endblock content %}

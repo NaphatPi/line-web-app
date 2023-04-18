@@ -1,0 +1,59 @@
+{% block alert %}
+{% endblock %}
+{% extends "table_template.html" %}
+{% block content %}
+<div class="content-section-2 mx-auto w-50 p-3">
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Admin log In</legend>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} " role="alert">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                
+                {% if form.username.errors %}
+                    {{ form.username(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.username(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                
+                {% if form.password.errors %}
+                    {{ form.password(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.password(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-check mb-3">
+                {{ form.remember_me(class="form-check-input") }}
+                {{ form.remember_me.label(class="form-check-label") }}
+            </div>
+        </fieldset>
+        <div class="mb-3">
+            {{ form.btnSubmit(class="btn btn-outline-dark") }}
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

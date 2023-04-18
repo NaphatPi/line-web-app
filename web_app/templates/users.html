@@ -1,0 +1,100 @@
+{% extends "table_template.html" %}
+
+{% block content %}
+<header class='content-header'>
+  <h1>Users</h1>
+</header>
+  <table id="data" class="table table-striped" style="width: 100%;">
+    <thead>
+      <tr>
+        <th id="pic">#</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Dealer</th>
+        <th>Position</th>
+        <th style="display:none;">UserID</th>
+        <th>Display Name</th>
+        <th style="text-align: center;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td id="pic"><img src="{{ user.pictureUrl }}" alt="" class="img-thumbnail rounded-circle img-responsive" style="width: 50px;"></td>
+          <td class="align-middle">{{ user.name }}</td>
+          <td class="align-middle">{{ user.surname }}</td>
+          <td class="align-middle">{{ user.dealer }}</td>
+          <td class="align-middle">{{ user.position }}</td>
+          <td style="display: none;">{{ user.userId }}</td>
+          <td class="align-middle">{{ user.displayName }}</td>
+          <td class="align-middle" style="text-align: center;">
+            <div class="btn-group">
+                <button type="button" class="btn {{ btn_map[user.status] }} dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.status.capitalize() }}
+                </button>
+                <div class="dropdown-menu">
+                  {% if user.status == "requested" %}
+                    <a class="btn-sm dropdown-item" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('users', userId=user.userId, action='approve' ) }}">Approve</a>
+                    <div class="btn-sm dropdown-divider"></div>
+                    <a class="btn-sm dropdown-item" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('users', userId=user.userId, action='reject' ) }}">Reject</a>
+                    <a class="btn-sm dropdown-item" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('users', userId=user.userId, action='block' ) }}">Block</a>
+                  {% else %}
+                    {% if user.status == "member" %}
+                    <a class="btn-sm dropdown-item" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('users', userId=user.userId, action='block' ) }}">Block</a>
+                    {% else %}
+                      <a class="btn-sm dropdown-item" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('users', userId=user.userId, action='unblock' ) }}">Unblock</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="btn-sm dropdown-item" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('users', userId=user.userId, action='delete' ) }}">Delete</a>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="modal" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="modal-cancel-btn" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <a type="button" id="modal-btn" href="" class="btn btn-primary">Save change</a>
+        <button class="btn btn-danger" type="button" id="btn-loading" style="display: none;">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function () {
+    $('#data').DataTable({
+      columns: [
+        {orderable: false, searchable: false},
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    });
+  });
+</script>
+<script src="{{ url_for('static', filename='users.js') }}"></script>
+{% endblock %}

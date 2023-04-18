@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข่าวสารบริการฉบับล่าสุด</title>
+</head>
+<body>
+</body>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+// alert(liffId)
+async function main() {
+    try {
+        await liff.init({ liffId: '{{ liffId }}' })
+        let msg = JSON.parse('{{msg|tojson}}')
+        console.log(msg)
+        await liff.sendMessages([msg])
+        liff.closeWindow()
+    } catch (e) {
+        console.log(e)
+    }
+}
+main()
+</script>
+</html>

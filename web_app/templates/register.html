@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section" id="main">
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <fieldset class="mb-3">
+            <h5 class="border-bottom mb-4 text-center" style="margin-top: 5px;">แบบฟอร์มลงทะเบียน TSE LINE OA</h5>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="mb-3">
+                {{ form.name.label(class="form-label") }}
+                
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg", placeholder="-") }}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <div class="mb-3">
+                    {{ form.surname.label(class="form-label") }}
+                    
+                    {% if form.surname.errors %}
+                        {{ form.surname(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.surname.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.surname(class="form-control form-control-lg", placeholder="-") }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="mb-3">
+                    {{ form.dealer.label(class="form-label") }}
+                    
+                    {% if form.dealer.errors %}
+                        {{ form.dealer(class="form-select form-select-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.dealer.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.dealer(class="form-select form-select-lg") }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mb-3" style="display:none" id="form-position">
+                <div class="mb-3">
+                    {{ form.position.label(class="form-label") }}
+                    
+                    {% if form.position.errors %}
+                        {{ form.position(class="form-select form-select-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.position.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.position(class="form-select form-select-lg") }}
+                    {% endif %}
+                </div>
+            </div>
+            
+        </fieldset>
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='register.js') }}"></script>
+{% endblock content %}

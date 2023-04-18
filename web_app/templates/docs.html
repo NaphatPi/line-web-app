@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+  <title>{{ title }}</title>
+  <style>
+      .selectDisable {
+      -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+          -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                      supported by Chrome, Opera and Firefox */
+      }
+
+        #background{
+      position:absolute;
+      z-index:0;
+      background:none;
+      display:inline-block;
+      width:100%;
+      color:yellow;
+      text-align: center;
+      }
+
+        #content{
+      position:absolute;
+      z-index:1;
+      }
+
+      @media (orientation: landscape) {
+        #bg-text{
+          color:rgba(156, 156, 156, 0.30);
+          line-height: 15;
+          white-space: nowrap;
+          font-size:24px;
+          transform:rotate(310deg);
+          -webkit-transform:rotate(310deg);
+        }
+      }
+
+      @media (orientation: portrait) {
+        #bg-text{
+          color:rgba(156, 156, 156, 0.30);
+          line-height: 8;
+          white-space: nowrap;
+          font-size:24px;
+          transform:rotate(310deg);
+          -webkit-transform:rotate(310deg);
+        }
+      }
+
+
+      img {
+        display: block;
+        width:100%;
+      }
+
+  </style>
+  <script>
+      window.addEventListener('load', (event) => {
+        document.querySelector('#main').style.display = "block";
+      });
+  </script>
+</head>
+<body>
+  <div class="selectDisable content" style="display: none;" id='main'>
+    {% for i in range(pageNum) %}
+    <div id="background">
+      <p id="bg-text">{{watermark}}</p>
+      <p id="bg-text">{{watermark}}</p>
+    </div>
+    <img src="{{ url_for('static', filename='docs/' + hex|string + '/pic/' + i|string + '.jpg') }}" alt="" draggable="false">
+    {% endfor %}
+  </div>
+</body>
+</html>

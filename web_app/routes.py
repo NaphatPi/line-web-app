@@ -33,7 +33,7 @@ def register():
     if session['status'] == 'requested' and request.method == 'GET':
         return render_template('register_success.html', liffId=app.config['LIFF_ID'])
     if session['status'] == 'member' or session['status'] == 'blocked':
-        return render_template('error.html', error= "ไม่สามารถลงทะเบียนได้ เนื่องจากท่านเป็นสมาชิก LINE TSE OA อยู่แล้ว")
+        return render_template('error.html', error= "ไม่สามารถลงทะเบียนได้ เนื่องจากท่านเป็นสมาชิก LINE OA อยู่แล้ว")
     form = RegisterForm()
     if form.validate_on_submit():
         if User.query.filter_by(userId=session['userId']).first() != None: # Check if already registered
@@ -50,7 +50,7 @@ def register():
                 status = "requested",
                 displayName = session['display_name'],
                 dealer = form.dealer.data,
-                position = "TIS group" if form.dealer.data == "TIS group" else form.position.data,
+                position = "TIY group" if form.dealer.data == "TIY group" else form.position.data,
                 pictureUrl = session['picture'],
                 log = f"|{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}#requested"
             )
@@ -162,13 +162,13 @@ def recent_svb():
         if content[0]:
             msg = {
                 "type": "flex",
-                "altText":'ข่าวสารบริการอีซูซุฉบับล่าสุด',
+                "altText":'ข่าวสารฉบับล่าสุด',
                 "contents":content[1]
             }
         else:
             msg = {
                 'type': 'text',
-                'text': 'ไม่พบข่าวสารบริการ โปรดตรวจสอบบนระบบคุณใจดีอีกครั้ง'
+                'text': 'ไม่พบข่าวสาร โปรดตรวจสอบอีกครั้ง'
             }
     return render_template('recent_svb.html', liffId=app.config['LIFF_ID'], msg=msg) 
 

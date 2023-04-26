@@ -1,7 +1,7 @@
 # LINE_web_app
 A Python-Flask web application for Line, a chat-based platform.
 
-This web app is designed to be used by an organization that wants to manage their users (or followers) on LINE platform.
+This web application is designed to be used by an organization that wants to manage their users (or followers) on LINE platform.
 
 The app provides various functionalities such as the following:
   - Registration system for new users to register before using the serivices or communicating with the organization.
